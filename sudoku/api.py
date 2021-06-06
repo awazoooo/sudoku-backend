@@ -1,20 +1,20 @@
-from flask import Flask, jsonify, request
+from flask import Blueprint, Flask, jsonify, request
 from flask_cors import CORS
-from main import Board
-from solvers.z3_solver import Z3Solver
+
+from sudoku.main import Board
+from sudoku.solvers.z3_solver import Z3Solver
 
 
-app = Flask(__name__)
-CORS(app)
+bp = Blueprint('/', __name__)
 
 
-@app.route('/sudoku/mock', methods=['GET'])
+@bp.route('/sudoku/mock', methods=['GET'])
 def mock_sudoku():
     res = { 'answer': list(range(0, 81)), 'solved': True }
     return jsonify(res)
 
 
-@app.route('/sudoku/solve', methods=['POST'])
+@bp.route('/sudoku/solve', methods=['POST'])
 def solve_sudoku():
     """
     Solve sudoku api
