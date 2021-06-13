@@ -74,6 +74,11 @@ class Cell:
         return self._candidates
 
 
+    @candidates.setter
+    def candidates(self, val):
+        self._candidates = val
+
+
     @property
     def valid(self):
         """ Check cell validation """

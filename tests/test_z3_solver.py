@@ -1,5 +1,6 @@
-from src.main import Board
-from src.solvers.z3_solver import Z3Solver
+from sudoku.main import Board
+from sudoku.solvers.z3_solver import Z3Solver
+
 
 def test_z3_solve_01():
     l = [int(i) for i in list( \

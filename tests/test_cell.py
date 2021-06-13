@@ -1,4 +1,4 @@
-from src.main import Cell
+from sudoku.main import Cell
 
 def check_cell(c, cell_id, col, row, block, value, candidates):
     assert c.cell_id == cell_id
@@ -30,12 +30,35 @@ def test_cell_create_large_01():
     check_cell(c, 130, 2, 8, 8, 0, {i for i in range(1, 16+1)})
 
 
+def test_cell_set_cell_id():
+    c = Cell(0, None, 9)
+    c.cell_id = 5
+    assert c.cell_id == 5
+
+
 def test_cell_set_value():
     c = Cell(0, None, 9)
-    c.set_value(5)
+    c.value = 5
     assert c.value == 5
-    assert c.candidates == set()
-    assert c.valid
+
+
+def test_cell_set_candidates():
+    c = Cell(0, None, 9)
+    c.candidates = {1, 2}
+    assert c.candidates == {1, 2}
+
+
+def test_cell_valid_01():
+    c = Cell(0, None, 9)
+    c.value = 5
+    c.candidates = {1, 2}
+    assert not c.valid
+
+
+def test_cell_valid_02():
+    c = Cell(0, None, 9)
+    c.candidates = set()
+    assert not c.valid
 
 
 def test_cell_update_01():
