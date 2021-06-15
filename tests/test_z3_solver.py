@@ -31,8 +31,9 @@ def test_z3_solve_01():
         '295143867')]
     assert all([[c.value for c in b.get_row(i)] == res[i*9:(i+1)*9] for i in range(9)])
 
+
 def test_z3_solve_02():
-    l = [int(i) for i in list(
+    values_list = [int(i) for i in list(
         '800000200'
         '000056003'
         '040900700'
@@ -42,7 +43,7 @@ def test_z3_solve_02():
         '003009050'
         '400760000'
         '008000006')]
-    b = Board(l, 9)
+    b = Board(values_list, 9)
     solver = Z3Solver(b)
     solver.solve()
     assert b.is_valid

@@ -233,7 +233,10 @@ class Board:
         Returns:
             bool: True if the cell updated
         """
-        rm_candidates = {c.value for c in self.get_col(cell.col)} | {c.value for c in self.get_row(cell.row)} | {c.value for c in self.get_block(cell.block)}
+        col_candidates = {c.value for c in self.get_col(cell.col)}
+        row_candidates = {c.value for c in self.get_row(cell.row)}
+        block_candidates = {c.value for c in self.get_block(cell.block)}
+        rm_candidates = col_candidates | row_candidates | block_candidates
 
         # Update candidates
         return cell.update_cell(rm_candidates)

@@ -4,7 +4,7 @@ from sudoku.main import Board
 
 @pytest.fixture
 def sample_board():
-    values_list = [int(i) for i in list( \
+    values_list = [int(i) for i in list(
         '020030008'
         '700600540'
         '004000090'
@@ -15,6 +15,7 @@ def sample_board():
         '071009005'
         '200040060')]
     return Board(values_list, 9), values_list
+
 
 def test_board_create_01():
     b = Board([1]*(9**2), 9)
@@ -27,11 +28,12 @@ def test_board_create_01():
     assert b.is_filled
     assert not b.is_solved
 
+
 def test_board_create_02(sample_board):
-    b, l = sample_board
+    b, values_list = sample_board
     assert len(b) == 81
-    assert all([[c.value for c in b.get_row(i)] == l[i*9:(i+1)*9] for i in range(9)])
-    assert all([[c.value for c in b.get_col(i)] == l[i::9] for i in range(9)])
+    assert all([[c.value for c in b.get_row(i)] == values_list[i*9:(i+1)*9] for i in range(9)])
+    assert all([[c.value for c in b.get_col(i)] == values_list[i::9] for i in range(9)])
     block_list = [
         [int(s) for s in '020700004'],
         [int(s) for s in '030600000'],
@@ -48,9 +50,11 @@ def test_board_create_02(sample_board):
     assert not b.is_filled
     assert not b.is_solved
 
+
 def test_board_cell_values(sample_board):
-    b, l = sample_board
-    assert b.get_cell_values() == l
+    b, values_list = sample_board
+    assert b.get_cell_values() == values_list
+
 
 def test_board_cell_update_01(sample_board):
     b, _ = sample_board
@@ -58,6 +62,7 @@ def test_board_cell_update_01(sample_board):
     assert b[0].value == 0
     assert b[0].candidates == {1, 6}
     assert b[0].valid
+
 
 def test_board_cell_update_02(sample_board):
     b, _ = sample_board
@@ -67,8 +72,9 @@ def test_board_cell_update_02(sample_board):
     assert b[0].candidates == set()
     assert b[0].valid
 
+
 def test_board_cell_all_update(sample_board):
-    b, l = sample_board
+    b, _ = sample_board
     b.update_all_cell()
     assert b.is_valid
     assert b.is_filled
