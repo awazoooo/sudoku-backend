@@ -10,7 +10,6 @@ class Cell:
      candidates (set): Cell candidate values
     """
 
-
     def __init__(self, pos, value, size):
         self._cell_id = pos
         self._col, self._row, self._block = self._get_pos(pos, size)
@@ -18,10 +17,8 @@ class Cell:
         self._candidates = set() if self.value else {i for i in range(1, size+1) if i != value}
         self._size = size
 
-
     def __repr__(self):
         return 'Cell({:d})'.format(self._cell_id)
-
 
     @staticmethod
     def _get_pos(pos, size):
@@ -32,52 +29,42 @@ class Cell:
         blk = size_root * (y // size_root) + (x // size_root)
         return x, y, blk
 
-
     @property
     def cell_id(self):
         return self._cell_id
-
 
     @cell_id.setter
     def cell_id(self, val):
         self._cell_id = val
 
-
     @property
     def value(self):
         return self._value
-
 
     @value.setter
     def value(self, val):
         self._value = val
         self._candidates = set()
 
-
     @property
     def col(self):
         return self._col
-
 
     @property
     def row(self):
         return self._row
 
-
     @property
     def block(self):
         return self._block
-
 
     @property
     def candidates(self):
         return self._candidates
 
-
     @candidates.setter
     def candidates(self, val):
         self._candidates = val
-
 
     @property
     def valid(self):
@@ -88,7 +75,6 @@ class Cell:
         else:
             # If cell value is fixed, the candidates must be empty
             return len(self.candidates) == 0
-
 
     def _decide(self):
         """ Decide cell value if it has only one candidate
@@ -102,13 +88,11 @@ class Cell:
 
         return False
 
-
     def _remove_candidates(self, rm_candidates):
         """ Remove candidates """
         before = len(set(self.candidates))
         self.candidates -= rm_candidates
         return before != len(self.candidates)
-
 
     def update_cell(self, rm_candidates):
         """ Update cell value and candidates
@@ -123,7 +107,6 @@ class Cell:
         res = self._remove_candidates(rm_candidates)
         res2 = self._decide()
         return res or res2
-
 
 
 class Board:
@@ -143,18 +126,14 @@ class Board:
         self.cells = [Cell(i, v, size) for i, v in enumerate(cells)]
         self.size = size
 
-
     def __getitem__(self, index):
         return self.cells[index]
-
 
     def __len__(self):
         return self.size**2
 
-
     def __repr__(self):
         return 'Board({:d}x{:d})'.format(self.size, self.size)
-
 
     def show(self):
         """ Print current board
@@ -192,7 +171,6 @@ class Board:
             print('|', '|'.join(values), '|', sep='')
             print(sep)
 
-
     def get_cell_values(self):
         """
         Get all values of cells
@@ -203,23 +181,19 @@ class Board:
 
         return [cell.value for cell in self.cells]
 
-
     def get_col(self, col):
         """ Get cells of the column """
         if col >= self.size:
             return []
         return self.cells[col::self.size]
 
-
     def get_row(self, row):
         """ Get cells of the row """
         return self.cells[row*self.size:(row+1)*self.size]
 
-
     def get_block(self, block):
         """ Get cells of the block """
         return [c for c in self.cells if c.block == block]
-
 
     @property
     def is_valid(self):
@@ -234,24 +208,21 @@ class Board:
             filtered = list(filter(lambda v: v, values))
             return len(filtered) == len(set(filtered))
 
-        return all(check(f(i)) \
-                   for f in [self.get_col, self.get_row, self.get_block] \
+        return all(check(f(i))
+                   for f in [self.get_col, self.get_row, self.get_block]
                    for i in range(self.size))
-
 
     @property
     def is_filled(self):
         """ Check current board is filled """
-        return all(cell.value \
-                   for i in range(self.size) \
+        return all(cell.value
+                   for i in range(self.size)
                    for cell in self.get_row(i))
-
 
     @property
     def is_solved(self):
         """ Return this board is solved """
         return self.is_filled and self.is_valid
-
 
     def update_one_cell(self, cell):
         """ Update one cell candidates
@@ -262,14 +233,10 @@ class Board:
         Returns:
             bool: True if the cell updated
         """
-        rm_candidates = \
-            {c.value for c in self.get_col(cell.col)} | \
-            {c.value for c in self.get_row(cell.row)} | \
-            {c.value for c in self.get_block(cell.block)}
+        rm_candidates = {c.value for c in self.get_col(cell.col)} | {c.value for c in self.get_row(cell.row)} | {c.value for c in self.get_block(cell.block)}
 
         # Update candidates
         return cell.update_cell(rm_candidates)
-
 
     def update_all_cell(self):
         """ Repeat update all cells candidates """
@@ -286,11 +253,10 @@ class Board:
             update = False
 
 
-
 if __name__ == '__main__':
     from solvers.z3_solver import Z3Solver
-    l = [int(i) for i in list('000009806306810000080002070030070402070604050502080010020100060000095308804700000')]
-    b = Board(l, 9)
+    values_list = [int(i) for i in list('000009806306810000080002070030070402070604050502080010020100060000095308804700000')]
+    b = Board(values_list, 9)
     solver = Z3Solver(b)
     solver.solve()
     b.show()
