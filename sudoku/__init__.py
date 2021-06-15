@@ -10,6 +10,3 @@ def create_app():
     app.register_blueprint(api.bp)
 
     return app
-
-# if __name__ == '__main__':
-#     app.run(port=5000)

@@ -50,7 +50,3 @@ def solve_sudoku():
 
     answer = b.get_cell_values()
     return jsonify({'answer': answer, 'solved': True})
-
-
-if __name__ == '__main__':
-    app.run(port=5000)
